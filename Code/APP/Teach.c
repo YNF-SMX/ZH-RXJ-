@@ -163,14 +163,17 @@ void Teach()
             MotorGoHome(MLMOTOR);
         }
         break;
-    case 21: //摆线回零
+    case 21: //
         if(InGet(I_MlArm_Up)==ON) //判断安全
         {
             MotorGoHome(FLMOTOR);
         }
         break;
-    case 22: //扭线回零
-        MotorGoHome(TWMOTOR);
+    case 22: //
+        if(InGet(I_MlArm_Up)==ON) //判断安全
+        {
+            MotorGoHome(TRMOTOR);
+        }
         break;
     case 23: //右移到终点
         if(InGet(I_MlArm_Up)==ON) //判断安全
@@ -184,23 +187,19 @@ void Teach()
             MotorMove(MLMOTOR,20,0,ABSMODE);
         }
         break;
-    case 25:   //摆线扭线位
-        if(OutGet(Q_TwistedClamp)==OFF&&InGet(I_TwistMotor_Org)==ON)
-        {
-            MotorMove(FLMOTOR,GUS.TechPara.Data.FeedLineSpd,GUS.TechPara.Data.Feedlinelen,RELMODE);
-        }
-        break;
+ 
     case 26:  //转台测试
         if(InGet(I_MlArm_Up)==ON)//判断安全
         {
             MotorMove(TRMOTOR,GUS.TechPara.Data.TurnSpd,GUS.TechPara.Data.TurnCir*GSS.axis[TRMOTOR].Axconver.MPR,RELMODE);//转动相应圈数
         }
         break;
-    case 27:  //扭扎带测试
-        MotorMove(TWMOTOR,GUS.TechPara.Data.TwiedSpd,GUS.TechPara.Data.Cir*GSS.axis[TWMOTOR].Axconver.MPR,RELMODE);//转动相应圈数
+    case 27:  //扭线一圈
+		MotorMove(FLMOTOR,GUS.TechPara.Data.TwiedSpd,GSS.axis[FLMOTOR].Axconver.MPR,RELMODE);
         break;
-    case 28:  //送线
-        LogicTask.FeedlineTask.execute = 1;
+
+    case 28:  //
+        
         break;
     case 29:
         LogicTask.CutlineTask.execute = 1;
@@ -208,26 +207,42 @@ void Teach()
     case 30:
         FeedTask.execute = 1;
         break;
-    case 31:  //下移线 前后
-        if(InGet(I_MlArm_Up)==ON)
-        {
-            //下一线在前面
-            if(OutGet(Q_TwistedWork)==ON )
-            {
-                if(OutGet(Q_TwistedTake)==OFF)
-                {
-                    OutSet(Q_TwistedWork,OFF);
-                }
-            } else
-            {
-                if(OutGet(Q_TwistedTake)==OFF)
-                {
-                    OutSet(Q_TwistedWork,ON);
-                }
-            }
-        }
-        break;
-
+	
+	case 40:  //上下
+		if(OutGet(Q_TakeArm)==ON)
+		{
+			OutSet(Q_TakeArm,OFF);
+		} else 
+		{
+			OutSet(Q_TakeArm,ON);
+		}
+		
+		break;
+	case 41: //双夹
+		if(HZ_AxGetCurPos(FLMOTOR)%GSS.axis[FLMOTOR].Axconver.PPR == 0)
+		{
+			if(OutGet(Q_TwistClamp)==ON)
+			{
+				OutSet(Q_TwistClamp,OFF);
+			} else 
+			{
+				OutSet(Q_TwistClamp,ON);
+			}
+		}
+		break;
+	case 42:
+		if(InGet(I_MlArm_Up)==ON)//判断安全
+		{
+		    if(OutGet(Q_Out)==ON)
+			{
+				OutSet(Q_Out,OFF);
+			} else 
+			{
+				OutSet(Q_Out,ON);
+			}
+		}
+		break;
+	
     default:
         break;
     }

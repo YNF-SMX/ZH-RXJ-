@@ -180,6 +180,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>LogicTask,0x0A</ItemText>
         </Ww>
+        <Ww>
+          <count>6</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>MtRst</ItemText>
+        </Ww>
       </WatchWindow1>
       <Tracepoint>
         <THDelay>0</THDelay>

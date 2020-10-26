@@ -50,14 +50,14 @@ void DataInit()
 	}
 
 	GSS.axis[MLMOTOR].Axlimitcfg.alarmmode = ON;
+	GSS.axis[FLMOTOR].Axlimitcfg.alarmmode = ON;
 	GSS.axis[TRMOTOR].Axlimitcfg.alarmmode = ON;
-
 	GSS.axis[MLMOTOR].Axconver.MPR = 4000;
 	GSS.axis[MLMOTOR].Axconver.PPR = 4000;
 	GSS.axis[TRMOTOR].Axconver.MPR = 1000;
 	GSS.axis[TRMOTOR].Axconver.PPR = 1000;
-	GSS.axis[TWMOTOR].Axconver.MPR = 1000;
-	GSS.axis[TWMOTOR].Axconver.PPR = 1000;
+	GSS.axis[FLMOTOR].Axconver.MPR = 1000;
+	GSS.axis[FLMOTOR].Axconver.PPR = 1000;
 	
 	if(GUS.spd[0].acctime == 0||GUS.spd[0].acctime>500)
 	{
@@ -106,7 +106,7 @@ void AppInit()
     GSW.JogMode = 2;
     GSR.HardWare_Ver[0] = 2019724;
 #if LOCK 
-	GSR.SoftWare_Ver[0] = 3020100;  //统一版本  106 改捆线原点感应报警延时 107加送线电机判断
+	GSR.SoftWare_Ver[0] = 4020100;  //统一版本  106 改捆线原点感应报警延时 107加送线电机判断
 #else
 	GSR.SoftWare_Ver[0] = 300104;  //统一版本
 #endif

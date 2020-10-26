@@ -46,10 +46,10 @@ typedef enum
 typedef enum	//轴号定义
 {
     MLMOTOR, //上移线电机
-	FLMOTOR, //摆线电机
+	FLMOTOR, //摆线电机 后端双夹电机
     TRMOTOR, //转台电机
-    TWMOTOR, //扭扎带电机
-	FEEDMOTOR,	//送线电机
+//    TWMOTOR, //扭扎带电机
+//	FEEDMOTOR,	//送线电机
 } AxisNum;
 
 typedef enum	//轴动模式选择

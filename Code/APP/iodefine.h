@@ -130,42 +130,30 @@ typedef enum
 /*********************绕线机*************************/
 /*			输入口定义		*/
 #define I_MLM_Org			CARD1,X1	//上移线原点
-#define I_FLM_Org	    	CARD1,X2    // 摆线电机原点
+#define I_FLM_Org	    	CARD1,X2    //转线原点
 #define I_Turn_Org			CARD1,X3	//转台原点
-#define I_TwistMotor_Org	CARD1,X4	//扭轧带原点
+//#define I_TwistMotor_Org	CARD1,X4	//扭轧带原点
 
 #define I_Start				CARD1,X6	//启动
 #define I_Scram   			CARD1,X7	//急停
 
 #define I_MlArm_Up			CARD1,X8	//上抓料
-#define I_FeedLine_Wrk		CARD1,X9	//送扎带前
-#define I_FeedLine_Org		CARD1,X10   //送扎带后
-#define I_RankUp			CARD1,X11	//排位气缸上感应
-#define I_RankDw			CARD1,X12	//排位气缸下感应
-#define I_TwistArm_Up		CARD1,X13	//扭线臂上感应
+#define I_MlArm_Dw			CARD1,X9    // 下抓料
 
-//机型3
-#define I_MLMid				CARD1,X14	//上移线中间感应
 
 /*			输出口定义		*/
 #define Q_TakeArm		CARD1,Y1	//出线下降
 #define Q_TakeClamp     CARD1,Y2	//取线爪
-#define Q_FeedLine		CARD1,Y3	//送扎带
-#define Q_Turn			CARD1,Y4	//转台+夹气缸
-#define Q_CutTape		CARD1,Y5	//剪扎带
-#define Q_Rank			CARD1,Y6    //排位气缸
-#define Q_End			CARD1,Y7	//送尾端
+#define Q_Rank			CARD1,Y3    //排位气缸
+#define Q_TwistClamp	CARD1,Y4	//
+#define Q_Press			CARD1,Y5	//压滚
+#define Q_Out			CARD1,Y6	//出料
+#define Q_TakeClamp2	CARD1,Y7	//取线小夹子
 
-#define Q_Lpress		CARD1,Y8	//左压
-#define Q_Rpress		CARD1,Y9	//右压
-#define Q_TwistedClamp	CARD1,Y10   //扭扎带
-#define Q_BendClamp		CARD1,Y11	//弯扎带
-#define Q_TwistedWork	CARD1,Y12   //弯扎带前后
+#define Q_Turn			CARD1,Y8	//转台+夹气缸
+//预留
+#define Q_End			CARD1,Y9	//送尾端
 
-#define Q_TwistedTake   CARD1,Y13	//扭线上下
-/****机型3****/
-#define Q_MoveLine		CARD1,Y14  
-#define Q_MoveLineON	CARD1,Y15
-#define Q_MoveLineOFF	CARD1,Y16
+
 
 #endif

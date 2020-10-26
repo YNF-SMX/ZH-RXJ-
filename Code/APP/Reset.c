@@ -47,12 +47,13 @@ void ResetMotor(void)
         case 2:
             if(HZ_AxGetStatus(i)==0)
             {
-                HZ_AxSetCurve(i,200,100,1000,100,200,0);
-                HZ_AxMoveRel(i,-60);
-                TimerRst(MtRst[i]);
-                MtRst[i].step = 3;
+//                HZ_AxSetCurve(i,200,100,1000,100,200,0);
+//                HZ_AxMoveRel(i,-60);
+//                TimerRst(MtRst[i]);
+//                MtRst[i].step = 3;
+				 MtRst[i].step = 4;
             }
-            else if(TimerCnt(MtRst[i])>=10000)
+            else if(TimerCnt(MtRst[i])>=20000)
             {
                 PARAINIT(MtRst[i]);
                 MtRst[i].err = 1;
@@ -69,11 +70,11 @@ void ResetMotor(void)
                 PARAINIT(MtRst[i]);
                 MtRst[i].err = 1;
             }
-            if(i == 2)
-            {
-                HZ_AxStop(i);
-                MtRst[i].step=4;
-            }
+//            if(i == 2)
+//            {
+//                HZ_AxStop(i);
+//                MtRst[i].step=4;
+//            }
             break;
 
         case 4:
@@ -121,10 +122,11 @@ void Reset()
 			REST_TASK.step = 2;
             break;
         case 2:
-            if(InGet(I_MlArm_Up)==ON && InGet(I_FeedLine_Org)==ON&&InGet(I_RankDw)==ON)
+            if(InGet(I_MlArm_Up)==ON && TimerCnt(REST_TASK)>= 500)
             {
                 MotorGoHome(MLMOTOR);
-                MotorGoHome(TWMOTOR);
+                MotorGoHome(FLMOTOR);
+				MotorGoHome(TRMOTOR);
                 REST_TASK.step ++;
             }
             else if(TimerCnt(REST_TASK)>=5000)
@@ -133,23 +135,15 @@ void Reset()
                 {
                     AlarmSetBit(2,0,0);//抓排料上感应异常
                 }
-                if(InGet(I_FeedLine_Org)==OFF)
-                {
-                    AlarmSetBit(2,0,1);//送线不在原点
-                }
-                if(InGet(I_RankDw)==OFF)
-                {
-                    AlarmSetBit(2,0,2);	//排位气缸异常
-                }
                 PARAINIT(REST_TASK);
                 GUW.Button.RunCommand = ERRSTOP;
             }
             break;
         case 3:
-            if( MtRst[MLMOTOR].execute==0 && MtRst[TWMOTOR].execute == 0)  //复位后剪线
+            if( MtRst[MLMOTOR].execute==0 && MtRst[FLMOTOR].execute == 0 && MtRst[TRMOTOR].execute== 0)  
             {
-                MotorGoHome(FLMOTOR);
-                OutSet(Q_CutTape,ON);
+                //MotorGoHome(FLMOTOR);
+                //OutSet(Q_CutTape,ON);
                 TimerRst(REST_TASK);
                 REST_TASK.step = 4;
             }
@@ -157,7 +151,7 @@ void Reset()
         case 4:
             if(TimerCnt(REST_TASK)>1000)
             {
-                OutSet(Q_CutTape,OFF);
+                //OutSet(Q_CutTape,OFF);
                 REST_TASK.step = 5;
             }
             break;
@@ -170,39 +164,6 @@ void Reset()
                 GUW.Button.RunCommand = STOP;
             }
             break;
-		case 6:
-			if(InGet(I_MlArm_Up)==ON)
-			{
-				MotorGoHome(MLMOTOR);
-				OutSet(Q_CutTape,ON);
-				TimerRst(REST_TASK);
-				REST_TASK.step = 7;
-			}else if(TimerCnt(REST_TASK)>=5000)
-            {
-                if(InGet(I_MlArm_Up)==OFF)
-                {
-                    AlarmSetBit(2,0,0);//抓排料上感应异常
-                }
-                PARAINIT(REST_TASK);
-                GUW.Button.RunCommand = ERRSTOP;
-            }
-			break;
-		case 7:
-			if(TimerCnt(REST_TASK)>=1000  )
-			{
-				OutSet(Q_CutTape,OFF);
-				REST_TASK.step = 8;
-			}
-			break;
-		case 8:
-			if(MtRst[MLMOTOR].execute==0)
-			{
-				PARAINIT(REST_TASK);
-                GSW.ClearAlarm = 1;
-                GUR.HaveToReset = 0;
-                GUW.Button.RunCommand = STOP;
-			}
-			break;
         }
     }
     else
