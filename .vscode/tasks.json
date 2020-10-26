@@ -1,0 +1,82 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "py",
+            "args": [
+                "-3",
+                "C:/Keil_v5/build.py",
+                "-b",
+                "Code/MDK-Pro/ZH_ZDJ.uvprojx"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                {
+                    "owner": "c",
+                    "fileLocation": ["relative", "${workspaceFolder}/Code/MDK-Pro"],
+                    "pattern": {
+                        "regexp": "^(.*)\\((\\d+)\\):\\s+(warning|error):\\s+(.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "severity": 3,
+                        "message": 4,
+                    }
+                }
+
+            ]
+        },
+        {
+            "label": "rebuild",
+            "type": "shell",
+            "command": "py",
+            "args": [
+                "-3",
+                "C:/Keil_v5/build.py",
+                "-r",
+                "Code/MDK-Pro/ZH_ZDJ.uvprojx"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                {
+                    "owner": "c",
+                    "fileLocation": ["relative", "${workspaceFolder}/Code/MDK-Pro"],
+                    "pattern": {
+                        "regexp": "^(.*)\\((\\d+)\\):\\s+(warning|error):\\s+(.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "severity": 3,
+                        "message": 4,
+                    }
+                }
+            ]
+        },
+        {
+            "label": "download",
+            "type": "shell",
+            "command": "py",
+            "args": [
+                "-3",
+                "C:/Keil_v5/build.py",
+                "-f",
+                "Code/MDK-Pro/ZH_ZDJ.uvprojx"
+            ],
+            "group": "test"
+        },
+        {
+            "label": "open in keil",
+            "type": "process",
+            "command": "C:/Keil_v5/UV4/UV4.exe",
+            "args": [
+                "Code/MDK-Pro/ZH_ZDJ.uvprojx"
+            ],
+            "group": "test"
+        }
+    ]
+}

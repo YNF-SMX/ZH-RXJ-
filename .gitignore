@@ -1,0 +1,17 @@
+!*.c 
+!*.h
+!*.uvoptx
+!*.uvprojx
+!*.MCP
+Objects
+Listings
+DebugConfig
+*.bak
+*.ldb
+*.uvguix.*
+*.log
+其他备份
+temp
+register
+Other
+HMI
