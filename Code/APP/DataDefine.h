@@ -50,35 +50,35 @@ typedef struct
 //轴速度配置
 typedef struct AxSpd_t
 {
-	float  startspeed;  //unit/s    2000
-	float  acctime;		//ms        2002
-	float  runspeed;	//unit/s    2004
-	float  dectime;		//ms        2006
-	float  endspeed;	//unit/s    2008
-}AxspdDef;
+    float  startspeed;  //unit/s    2000
+    float  acctime;		//ms        2002
+    float  runspeed;	//unit/s    2004
+    float  dectime;		//ms        2006
+    float  endspeed;	//unit/s    2008
+} AxspdDef;
 
 //轴回零配置
-typedef struct AxHome_t	
+typedef struct AxHome_t
 {
-	u32	orgnum;			 	//原点
-	u16 orglev;			 	//原点信号电平
+    u32	orgnum;			 	//原点
+    u16 orglev;			 	//原点信号电平
     u16 homemode;		 	//回零模式
-	float homespeedfast;    //unit/s 回零快速
-	float homespeedslow;  	//unit/s 回零慢速
-	float homespeedoffset; 	//unit/s 零点偏移
-}AxHomeDef;
+    float homespeedfast;    //unit/s 回零快速
+    float homespeedslow;  	//unit/s 回零慢速
+    float homespeedoffset; 	//unit/s 零点偏移
+} AxHomeDef;
 
 //轴限位配置
 typedef struct AxLimit_t
 {
-	u16 limitMode;		//限位模式：0 没限位 1 软件限位 2 硬件限位 3 软硬都限
-	u16	alarmmode;		//轴报警口配置  0 1 2报警电平信号
+    u16 limitMode;		//限位模式：0 没限位 1 软件限位 2 硬件限位 3 软硬都限
+    u16	alarmmode;		//轴报警口配置  0 1 2报警电平信号
     u16 poslimitsig;    //正限位信号
     u16 poslimitlev;    //正限位信号电平
     u16 neglimitsig;    //负限位信号
     u16 neglimitlev;    //负限位信号电平
     float softminlimit;   //软负限位 unit
-    float softmaxlimit;   //软正限位 unit 
+    float softmaxlimit;   //软正限位 unit
 } AxislimitDef;
 
 //轴单位转换
@@ -86,7 +86,7 @@ typedef struct AxisConversion_t
 {
     u32 PPR;	//每转脉冲数
     float MPR;	//每转毫米__导程
-} AxisConversion; 
+} AxisConversion;
 
 //轴参数类
 typedef struct AxisPara_t
@@ -95,7 +95,7 @@ typedef struct AxisPara_t
     AxHomeDef Axhomecfg;        //10个寄存器 2010
     AxislimitDef Axlimitcfg;    //10个寄存器 2020
     AxisConversion Axconver;    //4个寄存器  2030-2033
-}AxisData;
+} AxisData;
 
 
 
@@ -137,16 +137,16 @@ typedef union {
                     u32 RunStatus; 		//500 运行状态显示
                     u32 HaveToReset;    //502 复位标志
                     u32 HaveToRepower;  //504 重启标志
-					u16 year;		//506显示到期时间
-					u16 month;      //507
-					u16 day;        //508
-					u16 week;		//509剩余时间
-					u32	RegistState;	//510 注册提示
-					u32 AlarmRegist;	//512 快到期提示
-					u16 yearcur;        //514
-					u16 monthcur;       //515
-					u16 daycur;         //516
-					u16 weekcur;	//517
+                    u16 year;		//506显示到期时间
+                    u16 month;      //507
+                    u16 day;        //508
+                    u16 week;		//509剩余时间
+                    u32	RegistState;	//510 注册提示
+                    u32 AlarmRegist;	//512 快到期提示
+                    u16 yearcur;        //514
+                    u16 monthcur;       //515
+                    u16 daycur;         //516
+                    u16 weekcur;	//517
                 } Data;
             } User;
         } Read;
@@ -190,18 +190,18 @@ typedef union {
                     {
                         u32 RunCommand;		//1500  0 初始状态 1停止 2 运行 3 复位 4 急停 5暂停 6下载态
                         u32 RunMode;		//1502  0 自动模式 1单步模式
-						u32 FdStart;		//1504  1 脚踏
-						u32	BundSwith;		//1506	1 后端捆线开关
-						u32 StepMode;		//1508  1 单步运行
-						u32 StepState;		//1510  1 单步正常运行 2单步走完了，需要复位清掉
-						u32 TestMode;		//1512	测试模式
-						u32 Save;			//1514	数据保存
-						u32 BundTest;		//1516
-						u32 Login;			//1518  注册
-                    } Button; 				//留10个int 的空间 
-					u32 TeachWord; 			//1520
-					u32 UPH;				//1522
-					u32 DataReset;			//1524 数据初始化
+                        u32 FdStart;		//1504  1 脚踏
+                        u32	BundSwith;		//1506	1 后端捆线开关
+                        u32 StepMode;		//1508  1 单步运行
+                        u32 StepState;		//1510  1 单步正常运行 2单步走完了，需要复位清掉
+                        u32 TestMode;		//1512	测试模式
+                        u32 Save;			//1514	数据保存
+                        u32 BundTest;		//1516
+                        u32 Login;			//1518  注册
+                    } Button; 				//留10个int 的空间
+                    u32 TeachWord; 			//1520
+                    u32 UPH;				//1522
+                    u32 DataReset;			//1524 数据初始化
 
                 } Data;
             } User;
@@ -214,15 +214,15 @@ typedef union {
                 u16 Data_16[SYSSAVELEN / 2];
                 struct
                 {
-                    AxisData axis[MAXAXISNUM];       //轴的运行参数 34*50  2000-3699 
-                    struct 
+                    AxisData axis[MAXAXISNUM];       //轴的运行参数 34*50  2000-3699
+                    struct
                     {   //3700-3719
                         u32 checkflag;  //初始化检测，当新板块没写过数据或是数据不是规定值时，需要初始化modbus的存储寄存器初值，防止出现新卡上电全ff或数据清空后，导致的撞机等意外情况。初始化过数据后写0xea
                         //3702
-						u32 lockflag;
-						u32 Date;
-						u32 res[7];     //预留，用做锁机时间等
-                    }SaveCheck;
+                        u32 lockflag;
+                        u32 Date;
+                        u32 res[7];     //预留，用做锁机时间等
+                    } SaveCheck;
                 } Data;
             } Sys;
 
@@ -231,26 +231,26 @@ typedef union {
                 u16 Data_16[USERSAVELEN / 2];
                 struct
                 {
-					u32 bundPara[10];  	//4000 4002 4004
-					TechParaDef TechPara;	 	//4020 +80
-					AxspdDef	spd[5];		 	//4100 +50  4110 4120 4130 4140 
-					s32 HomeOffset[5]; 	//4150 原点偏移 4152 4154 4156 4158
-					u32 LineCnt;		//4160 加工线数
-					u32 CNT;			//4162 总加工数
-					u32 IfAutoRst;		//4164	是否开机自动回原点
-					u32 MachineMode;	//4166 切换机台模式 0：摆线臂 1：送线电机
-					u32 SendEndEn;		//4168 送尾开关
-					u32 SendSpeed;		//4170 送尾速度
-					float SendCir;		//4172 送尾圈数
-					u32 RankStop;		//4174 0排位启用 1排位不使用
-					float TWRatio;		//4176 扭线比例
-					struct 
+                    u32 bundPara[10];  	//4000 4002 4004
+                    TechParaDef TechPara;	 	//4020 +80
+                    AxspdDef	spd[5];		 	//4100 +50  4110 4120 4130 4140
+                    s32 HomeOffset[5]; 	//4150 原点偏移 4152 4154 4156 4158
+                    u32 LineCnt;		//4160 加工线数
+                    u32 CNT;			//4162 总加工数
+                    u32 IfAutoRst;		//4164	是否开机自动回原点
+                    u32 MachineMode;	//4166 切换机台模式 0：摆线臂 1：送线电机
+                    u32 SendEndEn;		//4168 送尾开关
+                    u32 SendSpeed;		//4170 送尾速度
+                    float SendCir;		//4172 送尾圈数
+                    u32 RankStop;		//4174 0排位启用 1排位不使用
+                    float TWRatio;		//4176 扭线比例
+                    struct
                     {   //4178
                         u32 checkflag;  //初始化检测，当新板块没写过数据或是数据不是规定值时，需要初始化modbus的存储寄存器初值，防止出现新卡上电全ff或数据清空后，导致的撞机等意外情况。初始化过数据后写0xea
-						u32 lockflag;  //4180
-						u32 Date;     //4182
-						u32 ID;		//4184
-                    }SaveCheck;
+                        u32 lockflag;  //4180
+                        u32 Date;     //4182
+                        u32 ID;		//4184
+                    } SaveCheck;
                 } Data;
             } User;
         } Save;

@@ -30,30 +30,30 @@ void AppErrHandle(void)
             GUW.Button.RunCommand = ERRSTOP;
         }
     }
-	
+
     if(GSR.ErrorLevel ==4 )
     {
         GUR.HaveToRepower = 1;
         GUW.Button.RunCommand = ERRSTOP;
     }
-	
+
     if(GSR.ErrorLevel == 3)
     {
         GUR.HaveToReset = 1;
     }
-	for(int i=0;i<5;i++)
-	{
-		if (AX_ERR_AX_ALM == HZ_AxGetAxisErr(i))
+    for(int i=0; i<5; i++)
+    {
+        if (AX_ERR_AX_ALM == HZ_AxGetAxisErr(i))
         {
             AlarmSetBit(3, 0, i+1); //ÖáµÄÇý¶¯Æ÷±¨¾¯
         }
-	}
+    }
 
 }
 
 void stop_handle(void)
 {
-    
+
 }
 
 
@@ -61,11 +61,11 @@ void stop_handle(void)
 */
 void Data_Save()
 {
-	if(GUW.Button.Save)
-	{	
-		GUW.Button.Save = 0;
-		FRam_Write(0,&GUS,sizeof(GUS));
-	}
+    if(GUW.Button.Save)
+    {
+        GUW.Button.Save = 0;
+        FRam_Write(0,&GUS,sizeof(GUS));
+    }
 }
 
 
@@ -76,20 +76,20 @@ void MainTask(void)
     Logic();
     Reset();
     Teach();
-	ResetMotor();
-	Data_Save();
+    ResetMotor();
+    Data_Save();
     if(GUR.RunStatus != RUN && GUR.RunStatus != D_RESET && GUR.RunStatus != SCRAM)
     {
         HZ_JogOperate(7);
     }
-	else
-	{
-		PARAINIT(GSW.JogBackward);
-		PARAINIT(GSW.JogForward);
-		PARAINIT(GSW.JogGohome);
-	}
-	GUR.yearcur = GSR.date.year;
-	GUR.monthcur  = GSR.date.month;
-	GUR.daycur = GSR.date.day;
+    else
+    {
+        PARAINIT(GSW.JogBackward);
+        PARAINIT(GSW.JogForward);
+        PARAINIT(GSW.JogGohome);
+    }
+    GUR.yearcur = GSR.date.year;
+    GUR.monthcur  = GSR.date.month;
+    GUR.daycur = GSR.date.day;
 }
 

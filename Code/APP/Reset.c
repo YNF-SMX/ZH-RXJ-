@@ -51,7 +51,7 @@ void ResetMotor(void)
 //                HZ_AxMoveRel(i,-60);
 //                TimerRst(MtRst[i]);
 //                MtRst[i].step = 3;
-				 MtRst[i].step = 4;
+                MtRst[i].step = 4;
             }
             else if(TimerCnt(MtRst[i])>=20000)
             {
@@ -116,17 +116,17 @@ void Reset()
             GUW.Button.StepState = 0;
             GUW.Button.StepMode = 0;
             PARAINIT(LogicTask);
-			PARAINIT(Data);
+            PARAINIT(Data);
             initIO();
             TimerRst(REST_TASK);
-			REST_TASK.step = 2;
+            REST_TASK.step = 2;
             break;
         case 2:
             if(InGet(I_MlArm_Up)==ON && TimerCnt(REST_TASK)>= 500)
             {
                 MotorGoHome(MLMOTOR);
                 MotorGoHome(FLMOTOR);
-				MotorGoHome(TRMOTOR);
+                MotorGoHome(TRMOTOR);
                 REST_TASK.step ++;
             }
             else if(TimerCnt(REST_TASK)>=5000)
@@ -140,7 +140,7 @@ void Reset()
             }
             break;
         case 3:
-            if( MtRst[MLMOTOR].execute==0 && MtRst[FLMOTOR].execute == 0 && MtRst[TRMOTOR].execute== 0)  
+            if( MtRst[MLMOTOR].execute==0 && MtRst[FLMOTOR].execute == 0 && MtRst[TRMOTOR].execute== 0)
             {
                 //MotorGoHome(FLMOTOR);
                 //OutSet(Q_CutTape,ON);

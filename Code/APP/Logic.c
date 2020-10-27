@@ -116,7 +116,7 @@ void Winding(LogicParaDef *Task, TechParaDef *Para)
     case 2:
         if(TCNT(Task)>=Para->Data.TurnClampDelay_CL)
         {
-            if(GUS.RankStop) //ÅÅÎ»ÆôÓÃ
+            if(GUS.RankStop == 0) //ÅÅÎ»ÆôÓÃ
             {
                 LogicTask.RankDoTask.execute = 1;
             }
@@ -288,49 +288,49 @@ void TwistedLine(LogicParaDef *Task, TechParaDef *Para)
     case 1:
         if(HZ_AxGetStatus(FLMOTOR)==0)
         {   //Å¤È¦È¦
-			MotorMove(FLMOTOR,Para->Data.TwiedSpd, Para->Data.Cir*GSS.axis[FLMOTOR].Axconver.MPR, RELMODE);
-			STEP = 2;
+            MotorMove(FLMOTOR,Para->Data.TwiedSpd, Para->Data.Cir*GSS.axis[FLMOTOR].Axconver.MPR, RELMODE);
+            STEP = 2;
         }
         break;
-	case 2:
-		if(HZ_AxGetStatus(FLMOTOR)==0)
-		{
-			OutSet(Q_Press,OFF);
-			TRST(Task);
-			STEP = 3;
-		}
-		break;
-	case 3:
-		if(TCNT(Task)>=Para->Data.PressOFF)
-		{
-			OutSet(Q_TwistClamp,OFF);
-			TRST(Task);
-			STEP = 4;
-		}
-		break;
-	case 4:
-		if(HZ_AxGetCurPos(MLMOTOR)>200 && TCNT(Task)>=Para->Data.TwistedClampOFFDelay)
-		{
-			OutSet(Q_Out,ON);
-			TRST(Task);
-			STEP = 5;
-		}
-		break;
-	case 5:
-		if(TCNT(Task)>=Para->Data.OutON)
-		{            
-			OutSet(Q_Out,OFF);
-			TRST(Task);
-			STEP = 6;
-		}
-		break;
-	case 6:
-		if(TCNT(Task)>=Para->Data.OutON)
-		{
-			PARAINIT(*Task);
-			Task->done = 1;
-		}
-		break;
+    case 2:
+        if(HZ_AxGetStatus(FLMOTOR)==0)
+        {
+            OutSet(Q_Press,OFF);
+            TRST(Task);
+            STEP = 3;
+        }
+        break;
+    case 3:
+        if(TCNT(Task)>=Para->Data.PressOFF)
+        {
+            OutSet(Q_TwistClamp,OFF);
+            TRST(Task);
+            STEP = 4;
+        }
+        break;
+    case 4:
+        if(HZ_AxGetCurPos(MLMOTOR)>200 && TCNT(Task)>=Para->Data.TwistedClampOFFDelay)
+        {
+            OutSet(Q_Out,ON);
+            TRST(Task);
+            STEP = 5;
+        }
+        break;
+    case 5:
+        if(TCNT(Task)>=Para->Data.OutON)
+        {
+            OutSet(Q_Out,OFF);
+            TRST(Task);
+            STEP = 6;
+        }
+        break;
+    case 6:
+        if(TCNT(Task)>=Para->Data.OutON)
+        {
+            PARAINIT(*Task);
+            Task->done = 1;
+        }
+        break;
     }
 }
 

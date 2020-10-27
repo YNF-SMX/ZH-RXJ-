@@ -22,38 +22,38 @@ u32 DateNum;	//日期
 //检查锁机状态
 void Logcheckin(void)
 {
-	GUR.year = GUS.SaveCheck.Date%100;  //到期年
-	GUR.month = GUS.SaveCheck.Date/100%100;  //到期月
-	GUR.day = GUS.SaveCheck.Date/10000;     //到期日
-	if(GUR.year>25)
-	{
-	   return;
-	}
-	/******		日期判断	****/	
+    GUR.year = GUS.SaveCheck.Date%100;  //到期年
+    GUR.month = GUS.SaveCheck.Date/100%100;  //到期月
+    GUR.day = GUS.SaveCheck.Date/10000;     //到期日
+    if(GUR.year>25)
+    {
+        return;
+    }
+    /******		日期判断	****/
     if(GUS.SaveCheck.lockflag != 0xab)	//没有解锁过
     {
         AlarmSetBit(4,0,4);//锁机状态
     }
-	else 
-	{
-		if(GSR.date.year>GUR.year||\
-			(GSR.date.year==GUR.year&&GSR.date.month>GUR.month)\
-			||(GSR.date.year==GUR.year&&GSR.date.month==GUR.month&&GSR.date.day>GUR.day))
-		{
-			AlarmSetBit(4,0,4);  //锁机了
-			GUS.SaveCheck.lockflag = 0;
-			GUS.SaveCheck.Date = 0;
-		}
-	}
-	
-/***********注册函数***************/	
+    else
+    {
+        if(GSR.date.year>GUR.year||\
+                (GSR.date.year==GUR.year&&GSR.date.month>GUR.month)\
+                ||(GSR.date.year==GUR.year&&GSR.date.month==GUR.month&&GSR.date.day>GUR.day))
+        {
+            AlarmSetBit(4,0,4);  //锁机了
+            GUS.SaveCheck.lockflag = 0;
+            GUS.SaveCheck.Date = 0;
+        }
+    }
+
+    /***********注册函数***************/
     if(GUW.Button.Login == 1)
     {
-		GUR.RegistState = 0;
-		GUW.Button.Login = 0;
+        GUR.RegistState = 0;
+        GUW.Button.Login = 0;
         if(Regist(GSR.CID[1],GSR.CID[0],GSW.LockPara.decode[0],&DateNum)==0)
         {   //成功
-			GUR.RegistState = 1;
+            GUR.RegistState = 1;
             GUS.SaveCheck.lockflag = 0xab;
             GUS.SaveCheck.Date = DateNum;
             FRam_Write(0,&GUS,sizeof(GUS));
@@ -63,11 +63,11 @@ void Logcheckin(void)
             }
         } else
         {   //失败
-			GUR.RegistState = 2;
+            GUR.RegistState = 2;
             AlarmSetBit(4,0,4);//锁机状态
         }
     }
-	
+
 }
 
 Date Dset;
@@ -96,12 +96,12 @@ int main()
 #if LOCK
         //Logcheckin();
 #endif
-		if(settime==1)
-		{
-			settime = 0;
-			RTC_Set_Date(Dset.year,Dset.month,Dset.day,Dset.week);
-			RTC_Set_Time(Tset.hour,Tset.min,Tset.sec,Tset.ampm);
-		}
+        if(settime==1)
+        {
+            settime = 0;
+            RTC_Set_Date(Dset.year,Dset.month,Dset.day,Dset.week);
+            RTC_Set_Time(Tset.hour,Tset.min,Tset.sec,Tset.ampm);
+        }
     }
 }
 

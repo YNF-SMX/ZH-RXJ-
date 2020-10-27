@@ -5,7 +5,7 @@
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \YD_KZJ\Code\APP\LogicData.h
- */ 
+ */
 #ifndef __LOGICDATA_H
 #define __LOGICDATA_H
 #include "bsplib.h"
@@ -15,7 +15,7 @@ typedef struct
     u8 execute;
     u8 step;
     u8 done;
-	u8 err;		//错误码
+    u8 err;		//错误码
     u32 count;	//用于记录圈数，必须放大单位
     u32 tm;
 } LogicParaDef;
@@ -38,7 +38,7 @@ typedef struct
 		a->step = 1;                      \
 		a->done = 0;						\
 	}
-#define STEP Task->step 
+#define STEP Task->step
 
 
 #endif

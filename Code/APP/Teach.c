@@ -15,7 +15,7 @@
 //剪线函数，手动单独调用
 void Cutline(LogicParaDef *Task)
 {
-    
+
 }
 
 LogicParaDef FeedTask;
@@ -27,9 +27,78 @@ void Feed()
     }
     switch(FeedTask.step)
     {
-    
+
     }
 }
+
+LogicParaDef TwistTask;
+void TwistTest(LogicParaDef* Task, TechParaDef *Para) //扭线测试
+{
+    INITT(Task)
+    switch (STEP)
+    {
+    case 1:
+        if(HZ_AxGetStatus(FLMOTOR)==0)
+        {
+            if(HZ_AxGetCurPos(FLMOTOR)%GSS.axis[FLMOTOR].Axconver.PPR == 0)
+            {
+                if(OutGet(Q_TwistClamp) == OFF)
+                {
+                    OutSet(Q_TwistClamp,ON);
+                }
+            }
+
+            //扭圈圈
+            MotorMove(FLMOTOR,Para->Data.TwiedSpd, Para->Data.Cir*GSS.axis[FLMOTOR].Axconver.MPR, RELMODE);
+            STEP = 2;
+        }
+        break;
+    case 2:
+        if(HZ_AxGetStatus(FLMOTOR)==0)
+        {
+            OutSet(Q_Press,OFF);
+            TRST(Task);
+            STEP = 3;
+        }
+        break;
+    case 3:
+        if(TCNT(Task)>=Para->Data.PressOFF)
+        {
+            OutSet(Q_TwistClamp,OFF);
+            TRST(Task);
+            STEP = 4;
+        }
+        break;
+    case 4:
+        if(HZ_AxGetCurPos(MLMOTOR)>200 && TCNT(Task)>=Para->Data.TwistedClampOFFDelay)
+        {
+            OutSet(Q_Out,ON);
+            TRST(Task);
+            STEP = 5;
+        }
+        break;
+    case 5:
+        if(TCNT(Task)>=Para->Data.OutON)
+        {
+            OutSet(Q_Out,OFF);
+            TRST(Task);
+            STEP = 6;
+        }
+        break;
+    case 6:
+        if(TCNT(Task)>=Para->Data.OutON)
+        {
+            PARAINIT(*Task);
+        }
+        break;
+    }
+}
+
+
+
+
+
+
 
 LogicParaDef WindTask;
 void WindingTest(LogicParaDef* Task)
@@ -110,6 +179,7 @@ void Teach()
     }
     Feed();
     WindingTest(&WindTask);
+    TwistTest(&TwistTask, &GUS.TechPara);
     switch (GUW.TeachWord) //1520
     {
     case 1:
@@ -151,8 +221,8 @@ void Teach()
         //扭线动作测试
         if(1)
         {
-            if(LogicTask.TwistedLineTask.execute==0)
-                LogicTask.TwistedLineTask.execute = 1;
+            if(TwistTask.execute==0)
+                TwistTask.execute = 1;
         }
         break;
 
@@ -187,7 +257,7 @@ void Teach()
             MotorMove(MLMOTOR,20,0,ABSMODE);
         }
         break;
- 
+
     case 26:  //转台测试
         if(InGet(I_MlArm_Up)==ON)//判断安全
         {
@@ -195,11 +265,11 @@ void Teach()
         }
         break;
     case 27:  //扭线一圈
-		MotorMove(FLMOTOR,GUS.TechPara.Data.TwiedSpd,GSS.axis[FLMOTOR].Axconver.MPR,RELMODE);
+        MotorMove(FLMOTOR,GUS.TechPara.Data.TwiedSpd,GSS.axis[FLMOTOR].Axconver.MPR,RELMODE);
         break;
 
     case 28:  //
-        
+
         break;
     case 29:
         LogicTask.CutlineTask.execute = 1;
@@ -207,42 +277,42 @@ void Teach()
     case 30:
         FeedTask.execute = 1;
         break;
-	
-	case 40:  //上下
-		if(OutGet(Q_TakeArm)==ON)
-		{
-			OutSet(Q_TakeArm,OFF);
-		} else 
-		{
-			OutSet(Q_TakeArm,ON);
-		}
-		
-		break;
-	case 41: //双夹
-		if(HZ_AxGetCurPos(FLMOTOR)%GSS.axis[FLMOTOR].Axconver.PPR == 0)
-		{
-			if(OutGet(Q_TwistClamp)==ON)
-			{
-				OutSet(Q_TwistClamp,OFF);
-			} else 
-			{
-				OutSet(Q_TwistClamp,ON);
-			}
-		}
-		break;
-	case 42:
-		if(InGet(I_MlArm_Up)==ON)//判断安全
-		{
-		    if(OutGet(Q_Out)==ON)
-			{
-				OutSet(Q_Out,OFF);
-			} else 
-			{
-				OutSet(Q_Out,ON);
-			}
-		}
-		break;
-	
+
+    case 40:  //上下
+        if(OutGet(Q_TakeArm)==ON)
+        {
+            OutSet(Q_TakeArm,OFF);
+        } else
+        {
+            OutSet(Q_TakeArm,ON);
+        }
+
+        break;
+    case 41: //双夹
+        if(HZ_AxGetCurPos(FLMOTOR)%GSS.axis[FLMOTOR].Axconver.PPR == 0)
+        {
+            if(OutGet(Q_TwistClamp)==ON)
+            {
+                OutSet(Q_TwistClamp,OFF);
+            } else
+            {
+                OutSet(Q_TwistClamp,ON);
+            }
+        }
+        break;
+    case 42:
+        if(InGet(I_MlArm_Up)==ON)//判断安全
+        {
+            if(OutGet(Q_Out)==ON)
+            {
+                OutSet(Q_Out,OFF);
+            } else
+            {
+                OutSet(Q_Out,ON);
+            }
+        }
+        break;
+
     default:
         break;
     }

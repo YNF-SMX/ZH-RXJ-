@@ -5,7 +5,7 @@
  * @LastEditors: your name
  * @Description: In User Settings Edit
  * @FilePath: \YD_KZJ\Code\APP\reset.h
- */ 
+ */
 #ifndef __RESET__H
 #define __RESET__H
 

@@ -12,12 +12,12 @@
 FSM_type SysFsm;
 
 
-/** 
-  * @brief 回调函数 
-  */ 
+/**
+  * @brief 回调函数
+  */
 __weak void stop_handle(void)
 {
-   //this is stop;
+    //this is stop;
 }
 __weak void run_handle(void)
 {
@@ -26,7 +26,7 @@ __weak void run_handle(void)
 __weak void reset_handle(void)
 {
     //this is run;
-	
+
 }
 __weak void  scram_handle(void)
 {
@@ -34,11 +34,11 @@ __weak void  scram_handle(void)
 }
 __weak void pause_handle(void)
 {
-	//this is pause;
+    //this is pause;
 }
 __weak void errstop_handle(void)
 {
-	//this is pause;
+    //this is pause;
 }
 __weak void rdystop_handle(void)
 {
@@ -49,36 +49,36 @@ __weak void rdystop_handle(void)
 	PAUSE_EVENT,
 	ERR_EVENT,   //错误报警事件
 */
-FsmTable_type Fsm_table[] = 
+FsmTable_type Fsm_table[] =
 {
-  //{到来的事件，当前的状态，将要要执行的函数，下一个状态}
+    //{到来的事件，当前的状态，将要要执行的函数，下一个状态}
     { STOP_EVENT,  RUN,      stop_handle,  STOP },
-	{ STOP_EVENT,  D_RESET,  stop_handle,  STOP },
-	{ STOP_EVENT,  SCRAM,    stop_handle,  STOP }, //急停后，只能通过stop进入正常停机态
-	{ STOP_EVENT,  PAUSE,    stop_handle,  STOP },
-	{ STOP_EVENT,  ERRSTOP,  stop_handle,  STOP }, // 错误停状态后，可以清除报警进入正常停止
-	
-	{ RUN_EVENT,  STOP,   run_handle,  RUN },
-	{ RUN_EVENT,  PAUSE,  run_handle,  RUN },
+    { STOP_EVENT,  D_RESET,  stop_handle,  STOP },
+    { STOP_EVENT,  SCRAM,    stop_handle,  STOP }, //急停后，只能通过stop进入正常停机态
+    { STOP_EVENT,  PAUSE,    stop_handle,  STOP },
+    { STOP_EVENT,  ERRSTOP,  stop_handle,  STOP }, // 错误停状态后，可以清除报警进入正常停止
 
-	{ RESET_EVENT, STOP,  reset_handle, D_RESET},
-	{ RESET_EVENT, ERRSTOP,reset_handle,D_RESET },
+    { RUN_EVENT,  STOP,   run_handle,  RUN },
+    { RUN_EVENT,  PAUSE,  run_handle,  RUN },
+
+    { RESET_EVENT, STOP,  reset_handle, D_RESET},
+    { RESET_EVENT, ERRSTOP,reset_handle,D_RESET },
     { RESET_EVENT, INIT, reset_handle,D_RESET},
-	{RESET_EVENT,SCRAM,reset_handle,D_RESET},
-	
-	{SCRAM_EVENT, STOP, scram_handle, SCRAM},
-	{SCRAM_EVENT, RUN, scram_handle, SCRAM},
-	{SCRAM_EVENT, D_RESET, scram_handle, SCRAM},
-	{SCRAM_EVENT, PAUSE, scram_handle, SCRAM},
-	{SCRAM_EVENT, ERRSTOP, scram_handle, SCRAM},
-	{SCRAM_EVENT, INIT, scram_handle, SCRAM},
-	 
-	{PAUSE_EVENT, RUN,  pause_handle, PAUSE},
-	
-	{ERR_EVENT, RUN, errstop_handle, ERRSTOP},
-	{ERR_EVENT, D_RESET, errstop_handle, ERRSTOP},
-	{ERR_EVENT, PAUSE, errstop_handle, ERRSTOP},
-	
+    {RESET_EVENT,SCRAM,reset_handle,D_RESET},
+
+    {SCRAM_EVENT, STOP, scram_handle, SCRAM},
+    {SCRAM_EVENT, RUN, scram_handle, SCRAM},
+    {SCRAM_EVENT, D_RESET, scram_handle, SCRAM},
+    {SCRAM_EVENT, PAUSE, scram_handle, SCRAM},
+    {SCRAM_EVENT, ERRSTOP, scram_handle, SCRAM},
+    {SCRAM_EVENT, INIT, scram_handle, SCRAM},
+
+    {PAUSE_EVENT, RUN,  pause_handle, PAUSE},
+
+    {ERR_EVENT, RUN, errstop_handle, ERRSTOP},
+    {ERR_EVENT, D_RESET, errstop_handle, ERRSTOP},
+    {ERR_EVENT, PAUSE, errstop_handle, ERRSTOP},
+
 
 };
 
@@ -139,20 +139,20 @@ void FSM_EventHandle(FSM_type* pFsm, int event)
 
 void InitFsm(FSM_type* DeFsm)
 {
-	FSM_Regist(DeFsm,Fsm_table);
+    FSM_Regist(DeFsm,Fsm_table);
     DeFsm->curState = INIT;  //上电初始化，是错误停，设备需要复位
-	DeFsm->size = sizeof(Fsm_table)/sizeof(FsmTable_type);
+    DeFsm->size = sizeof(Fsm_table)/sizeof(FsmTable_type);
 }
 
 void FSM(u32* Event,FSM_type* dfsm)
 {
-	if(*Event)
-	{
-		FSM_EventHandle(dfsm,*Event);
-		*Event = 0;
-	}
-	
-	GUR.RunStatus = dfsm->curState;
+    if(*Event)
+    {
+        FSM_EventHandle(dfsm,*Event);
+        *Event = 0;
+    }
+
+    GUR.RunStatus = dfsm->curState;
 }
 
 
