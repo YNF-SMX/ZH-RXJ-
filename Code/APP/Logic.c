@@ -70,7 +70,15 @@ void RankDo(LogicParaDef *Task)
     {
         OutSet(Q_Rank,ON);
         TRST(Task);
-        STEP = 4;
+		if(GUS.RankStop == 0) //循环排位
+		{
+			STEP = 4;
+		}
+		else if(GUS.RankStop == 2) //单次排位
+		{
+			STEP = 6;
+		}
+        
     }
     break;
     case 4:
@@ -87,6 +95,13 @@ void RankDo(LogicParaDef *Task)
             OutSet(Q_Rank,ON);
             TRST(Task);
             STEP = 4;
+        }
+        break;
+		
+	case 6:
+        if(TCNT(Task)>=GUS.TechPara.Data.RankDelay)
+        {
+            OutSet(Q_Rank,OFF);            
         }
         break;
     }
@@ -116,7 +131,7 @@ void Winding(LogicParaDef *Task, TechParaDef *Para)
     case 2:
         if(TCNT(Task)>=Para->Data.TurnClampDelay_CL)
         {
-            if(GUS.RankStop == 0) //排位启用
+            if(GUS.RankStop == 0 || GUS.RankStop == 2) //排位启用
             {
                 LogicTask.RankDoTask.execute = 1;
             }
@@ -244,22 +259,26 @@ void TakeLine(LogicParaDef *Task, TechParaDef *Para)
         {
             OutSet(Q_TakeClamp,OFF);
             OutSet(Q_TakeClamp2,OFF);
+			LogicTask.TwistedLineTask.execute = 1; //爪子张开就开始扭线，不上台
             TRST(Task);
             STEP = 9;
         }
         break;
-    case 9:
-        if(TCNT(Task)>= Para->Data.TakeClampDelay_OP)	//张开时间
+    case 9: 
+        if(HZ_AxGetStatus(FLMOTOR)==0)	//张开时间  TCNT(Task)>= Para->Data.TakeClampDelay_OP
         {
-            OutSet(Q_TakeArm,OFF);
-            TRST(Task);
-            STEP = 10;
+			
+			OutSet(Q_TakeArm,OFF);
+			TRST(Task);
+			STEP = 10;
+			
+            
         }
         break;
     case 10:
         if(InGet(I_MlArm_Up)==ON)
         {   //上抬到位
-            LogicTask.TwistedLineTask.execute = 1;
+           // LogicTask.TwistedLineTask.execute = 1;
             //if(LogicTask.WindingTask.execute == 1)
             {
                 MotorMove(MLMOTOR,Para->Data.MovelineSpd,Para->Data.MoveLineLen,ABSMODE);
@@ -309,14 +328,14 @@ void TwistedLine(LogicParaDef *Task, TechParaDef *Para)
         }
         break;
     case 4:
-        if(HZ_AxGetCurPos(MLMOTOR)>200 && TCNT(Task)>=Para->Data.TwistedClampOFFDelay)
+        if(HZ_AxGetCurPos(MLMOTOR)>200 && TCNT(Task)>=Para->Data.TwistedClampOFFDelay && InGet(I_MlArm_Up) == ON)
         {
             OutSet(Q_Out,ON);
             TRST(Task);
             STEP = 5;
         }
         break;
-    case 5:
+    case 5: 
         if(TCNT(Task)>=Para->Data.OutON)
         {
             OutSet(Q_Out,OFF);

@@ -56,7 +56,7 @@ void TwistTest(LogicParaDef* Task, TechParaDef *Para) //扭线测试
     case 2:
         if(HZ_AxGetStatus(FLMOTOR)==0)
         {
-            OutSet(Q_Press,OFF);
+            //OutSet(Q_Press,OFF);
             TRST(Task);
             STEP = 3;
         }
@@ -66,25 +66,10 @@ void TwistTest(LogicParaDef* Task, TechParaDef *Para) //扭线测试
         {
             OutSet(Q_TwistClamp,OFF);
             TRST(Task);
-            STEP = 4;
-        }
-        break;
-    case 4:
-        if(HZ_AxGetCurPos(MLMOTOR)>200 && TCNT(Task)>=Para->Data.TwistedClampOFFDelay)
-        {
-            OutSet(Q_Out,ON);
-            TRST(Task);
-            STEP = 5;
-        }
-        break;
-    case 5:
-        if(TCNT(Task)>=Para->Data.OutON)
-        {
-            OutSet(Q_Out,OFF);
-            TRST(Task);
             STEP = 6;
         }
         break;
+
     case 6:
         if(TCNT(Task)>=Para->Data.OutON)
         {
@@ -124,7 +109,7 @@ void WindingTest(LogicParaDef* Task)
         {
             if(HZ_AxGetStatus(TRMOTOR)==0)
             {
-                if(GUS.RankStop == 0)
+                if(GUS.RankStop == 0 || GUS.RankStop == 2)
                 {
                     LogicTask.RankDoTask.execute = 1;
                 }
@@ -158,6 +143,7 @@ void WindingTest(LogicParaDef* Task)
         if(HZ_AxGetStatus(TRMOTOR)==0)
         {   //转动到对应圈
             LogicTask.RankDoTask.execute= 0;
+			OutSet(Q_Turn,OFF);	//转台气缸松开
             OutSet(Q_Rank,OFF);
             TRST(Task);
             STEP = 4;

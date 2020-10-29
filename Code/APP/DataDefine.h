@@ -242,7 +242,7 @@ typedef union {
                     u32 SendEndEn;		//4168 送尾开关
                     u32 SendSpeed;		//4170 送尾速度
                     float SendCir;		//4172 送尾圈数
-                    u32 RankStop;		//4174 0排位启用 1排位不使用
+                    u32 RankStop;		//4174 0排位启用 1排位不使用 2单次排位
                     float TWRatio;		//4176 扭线比例
                     struct
                     {   //4178
