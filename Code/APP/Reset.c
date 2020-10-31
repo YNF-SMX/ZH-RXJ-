@@ -80,9 +80,14 @@ void ResetMotor(void)
         case 4:
             if(HZ_AxGetStatus(i)==0)
             {
-                if(GUS.HomeOffset[i]>0)
+                if(GUS.HomeOffset[i] != 0)
                 {
                     HZ_AxSetCurve(i,200,100,2000,100,200,0);
+
+                    if(GUS.HomeOffset[0] < -180) //上移线偏移保护
+                    {
+                        GUS.HomeOffset[0] = -180;
+                    }
                     HZ_AxMoveRel(i,GUS.HomeOffset[i]);
                 }
                 MtRst[i].step = 5;
@@ -126,8 +131,8 @@ void Reset()
             {
                 MotorGoHome(MLMOTOR);
                 MotorGoHome(FLMOTOR);
-                MotorGoHome(TRMOTOR);
-                REST_TASK.step ++;
+                //MotorGoHome(TRMOTOR);
+                REST_TASK.step = 0xf0;
             }
             else if(TimerCnt(REST_TASK)>=5000)
             {
@@ -139,6 +144,14 @@ void Reset()
                 GUW.Button.RunCommand = ERRSTOP;
             }
             break;
+			
+		case 0xf0:
+				if(InGet(I_MlArm_Up)==ON && (HZ_AxGetCurPos(MLMOTOR)<=1800)) //机构冲突，上移线回到安全位置，转盘再复位，机构改好可去掉
+				{
+					MotorGoHome(TRMOTOR);
+					REST_TASK.step = 3;
+				}
+			break;
         case 3:
             if( MtRst[MLMOTOR].execute==0 && MtRst[FLMOTOR].execute == 0 && MtRst[TRMOTOR].execute== 0)
             {
