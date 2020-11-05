@@ -143,7 +143,7 @@ void WindingTest(LogicParaDef* Task)
         if(HZ_AxGetStatus(TRMOTOR)==0)
         {   //转动到对应圈
             LogicTask.RankDoTask.execute= 0;
-			OutSet(Q_Turn,OFF);	//转台气缸松开
+            OutSet(Q_Turn,OFF);	//转台气缸松开
             OutSet(Q_Rank,OFF);
             TRST(Task);
             STEP = 4;

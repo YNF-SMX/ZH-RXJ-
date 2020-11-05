@@ -51,11 +51,6 @@ void AppErrHandle(void)
 
 }
 
-void stop_handle(void)
-{
-
-}
-
 
 /*
 */

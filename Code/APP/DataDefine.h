@@ -192,8 +192,8 @@ typedef union {
                         u32 RunMode;		//1502  0 自动模式 1单步模式
                         u32 FdStart;		//1504  1 脚踏
                         u32	BundSwith;		//1506	1 后端捆线开关
-                        u32 StepMode;		//1508  1 单步运行
-                        u32 StepState;		//1510  1 单步正常运行 2单步走完了，需要复位清掉
+                        u32 StepMode;		//1508  1 单步运行,按一下置1
+                        u32 StepState;		//1510  1 单步正常运行 2单步走完了，需要复++位清掉，单步循环标志位
                         u32 TestMode;		//1512	测试模式
                         u32 Save;			//1514	数据保存
                         u32 BundTest;		//1516

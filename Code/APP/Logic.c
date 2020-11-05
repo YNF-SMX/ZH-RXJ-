@@ -24,6 +24,12 @@ SysData Data = {0};   //统一的数据类
 
 extern void initIO(void);
 
+
+void stop_handle(void)
+{
+    LogicTask.RankDoTask.execute = 0;
+}
+
 void run_handle(void)
 {
     if(GUW.Button.RunMode == 0)
@@ -70,15 +76,15 @@ void RankDo(LogicParaDef *Task)
     {
         OutSet(Q_Rank,ON);
         TRST(Task);
-		if(GUS.RankStop == 0) //循环排位
-		{
-			STEP = 4;
-		}
-		else if(GUS.RankStop == 2) //单次排位
-		{
-			STEP = 6;
-		}
-        
+        if(GUS.RankStop == 0) //循环排位
+        {
+            STEP = 4;
+        }
+        else if(GUS.RankStop == 2) //单次排位
+        {
+            STEP = 6;
+        }
+
     }
     break;
     case 4:
@@ -97,11 +103,11 @@ void RankDo(LogicParaDef *Task)
             STEP = 4;
         }
         break;
-		
-	case 6:
+
+    case 6:
         if(TCNT(Task)>=GUS.TechPara.Data.RankDelay)
         {
-            OutSet(Q_Rank,OFF);            
+            OutSet(Q_Rank,OFF);
         }
         break;
     }
@@ -193,7 +199,7 @@ void TakeLine(LogicParaDef *Task, TechParaDef *Para)
     case 2:
         if(HZ_AxGetStatus(MLMOTOR)== 0 && HZ_AxGetStatus(TRMOTOR)==0)
         {
-            if(LogicTask.WindingTask.execute == 0)
+            if(LogicTask.WindingTask.execute == 0)  //没有绕线时,下降
             {
                 OutSet(Q_TakeArm,ON);
                 TRST(Task);
@@ -209,6 +215,7 @@ void TakeLine(LogicParaDef *Task, TechParaDef *Para)
             OutSet(Q_TakeClamp2,ON);
             OutSet(Q_Turn,OFF);	//转台气缸松开
             TRST(Task);
+            Data.StepSS = 0;
             STEP = 4;
         }
         break;
@@ -217,6 +224,7 @@ void TakeLine(LogicParaDef *Task, TechParaDef *Para)
         {
             OutSet(Q_TakeArm, OFF); //取料上提
             TRST(Task);
+            Data.StepSS = 1;
             STEP = 5;
         }
         break;
@@ -226,6 +234,7 @@ void TakeLine(LogicParaDef *Task, TechParaDef *Para)
             Data.WindingState = 0;   //转台线取走,进入空闲状态
             MotorMove(MLMOTOR,Para->Data.MovelineSpd,0,ABSMODE);
             STEP = 6;
+            Data.StepSS = 1;
             TRST(Task);
         }
         break;
@@ -241,6 +250,7 @@ void TakeLine(LogicParaDef *Task, TechParaDef *Para)
                 }
                 OutSet(Q_TakeArm, ON);
                 TRST(Task);
+                Data.StepSS = 0;
                 STEP = 7;
             }
         }
@@ -251,6 +261,7 @@ void TakeLine(LogicParaDef *Task, TechParaDef *Para)
             OutSet(Q_Press,ON);
             OutSet(Q_TwistClamp,ON);
             TRST(Task);
+            Data.StepSS = 1;
             STEP = 8;
         }
         break;
@@ -259,27 +270,29 @@ void TakeLine(LogicParaDef *Task, TechParaDef *Para)
         {
             OutSet(Q_TakeClamp,OFF);
             OutSet(Q_TakeClamp2,OFF);
-			LogicTask.TwistedLineTask.execute = 1; //爪子张开就开始扭线，不上台
+            Data.StepSS = 0;
+            LogicTask.TwistedLineTask.execute = 1; //爪子张开就开始扭线，不上台
             TRST(Task);
             STEP = 9;
         }
         break;
-    case 9: 
+    case 9:
         if(HZ_AxGetStatus(FLMOTOR)==0)	//张开时间  TCNT(Task)>= Para->Data.TakeClampDelay_OP
         {
-			
-			OutSet(Q_TakeArm,OFF);
-			TRST(Task);
-			STEP = 10;
-			
-            
+            Data.StepSS = 1;
+            OutSet(Q_TakeArm,OFF);
+            TRST(Task);
+            STEP = 10;
+
+
         }
         break;
     case 10:
         if(InGet(I_MlArm_Up)==ON)
         {   //上抬到位
-           // LogicTask.TwistedLineTask.execute = 1;
+            // LogicTask.TwistedLineTask.execute = 1;
             //if(LogicTask.WindingTask.execute == 1)
+            Data.StepSS = 0;
             {
                 MotorMove(MLMOTOR,Para->Data.MovelineSpd,Para->Data.MoveLineLen,ABSMODE);
             }
@@ -335,12 +348,13 @@ void TwistedLine(LogicParaDef *Task, TechParaDef *Para)
             STEP = 5;
         }
         break;
-    case 5: 
+    case 5:
         if(TCNT(Task)>=Para->Data.OutON)
         {
             OutSet(Q_Out,OFF);
             TRST(Task);
             STEP = 6;
+            GUS.CNT ++;
         }
         break;
     case 6:
@@ -477,7 +491,7 @@ void Logic()
         if(GUW.Button.StepState == 1 && GUW.Button.StepMode == 1)
         {   //单步模式下 判断运行到需要停下的case时 将这个标志写1
             if(Data.StepSS == 1)
-            {   //标志写1 单步运行的标志写0 停在当前case
+            {   //标志写1 单步运行的标志写0 停在当前case ，
                 GUW.Button.StepMode = 0;
             }
         }
